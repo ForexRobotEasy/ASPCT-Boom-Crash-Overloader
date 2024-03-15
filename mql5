@@ -1,0 +1,113 @@
+
+//+------------------------------------------------------------------+
+//|                                              ASPCT Boom Crash Overloader    |
+//|                            Developed by Forex Robot Easy Team    |
+//|                                   Developer's site: forexroboteasy.com    |
+//+------------------------------------------------------------------+
+#property copyright 'Forex Robot Easy Team'
+#property link      'forexroboteasy.com'
+#property version   '1.00'
+
+// Define the index symbols
+string Boom300 = 'Boom 300 Index';
+string Boom500 = 'Boom 500 Index';
+string Boom1000 = 'Boom 1000 Index';
+string Crash300 = 'Crash 300 Index';
+string Crash500 = 'Crash 500 Index';
+string Crash1000 = 'Crash 1000 Index';
+
+// Define the line colors
+color gray = Gray;
+color green = Green;
+color red = Red;
+
+//+------------------------------------------------------------------+
+//| Custom indicator initialization function                         |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    // Set the indicator labels
+    ObjectCreate(0, 'Line1', OBJ_HLINE, 0, 0, 0);
+    ObjectCreate(0, 'Line2', OBJ_HLINE, 0, 0, 0);
+    ObjectCreate(0, 'Line3', OBJ_HLINE, 0, 0, 0);
+    ObjectCreate(0, 'Line4', OBJ_HLINE, 0, 0, 0);
+    ObjectCreate(0, 'Line5', OBJ_HLINE, 0, 0, 0);
+    ObjectCreate(0, 'Line6', OBJ_HLINE, 0, 0, 0);
+    
+    // Set the line colors
+    ObjectSet('Line1', OBJPROP_COLOR, gray);
+    ObjectSet('Line2', OBJPROP_COLOR, gray);
+    ObjectSet('Line3', OBJPROP_COLOR, gray);
+    ObjectSet('Line4', OBJPROP_COLOR, gray);
+    ObjectSet('Line5', OBJPROP_COLOR, gray);
+    ObjectSet('Line6', OBJPROP_COLOR, gray);
+    
+    return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Custom indicator iteration function                              |
+//+------------------------------------------------------------------+
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime &time[],
+                const double &open[],
+                const double &high[],
+                const double &low[],
+                const double &close[],
+                const long &tick_volume[],
+                const long &volume[],
+                const int &spread[])
+{
+    // Calculate the spike direction for each index
+    bool boom300Spike = CalculateSpikeDirection(Boom300, rates_total, prev_calculated, close);
+    bool boom500Spike = CalculateSpikeDirection(Boom500, rates_total, prev_calculated, close);
+    bool boom1000Spike = CalculateSpikeDirection(Boom1000, rates_total, prev_calculated, close);
+    bool crash300Spike = CalculateSpikeDirection(Crash300, rates_total, prev_calculated, close);
+    bool crash500Spike = CalculateSpikeDirection(Crash500, rates_total, prev_calculated, close);
+    bool crash1000Spike = CalculateSpikeDirection(Crash1000, rates_total, prev_calculated, close);
+    
+    // Set the line colors based on spike direction
+    ObjectSet('Line1', OBJPROP_COLOR, boom300Spike ? green : gray);
+    ObjectSet('Line2', OBJPROP_COLOR, boom500Spike ? green : gray);
+    ObjectSet('Line3', OBJPROP_COLOR, boom1000Spike ? green : gray);
+    ObjectSet('Line4', OBJPROP_COLOR, crash300Spike ? green : gray);
+    ObjectSet('Line5', OBJPROP_COLOR, crash500Spike ? green : gray);
+    ObjectSet('Line6', OBJPROP_COLOR, crash1000Spike ? green : gray);
+    
+    // Check if trades should be opened in the opposite direction of spikes
+    
+    bool openTradesOpposite = CheckOpenTradesOpposite();
+    
+    if (openTradesOpposite)
+    {
+        ObjectSet('Line1', OBJPROP_COLOR, boom300Spike ? red : gray);
+        ObjectSet('Line2', OBJPROP_COLOR, boom500Spike ? red : gray);
+        ObjectSet('Line3', OBJPROP_COLOR, boom1000Spike ? red : gray);
+        ObjectSet('Line4', OBJPROP_COLOR, crash300Spike ? red : gray);
+        ObjectSet('Line5', OBJPROP_COLOR, crash500Spike ? red : gray);
+        ObjectSet('Line6', OBJPROP_COLOR, crash1000Spike ? red : gray);
+    }
+    
+    return(rates_total);
+}
+
+//+------------------------------------------------------------------+
+//| Function to calculate the spike direction for a specific index    |
+//+------------------------------------------------------------------+
+bool CalculateSpikeDirection(string index, const int rates_total, const int prev_calculated, const double &close[])
+{
+    // Perform calculations and determine the spike direction
+    
+    return spikeDirection;
+}
+
+//+------------------------------------------------------------------+
+//| Function to check if trades should be opened in the opposite direction of spikes |
+//+------------------------------------------------------------------+
+bool CheckOpenTradesOpposite()
+{
+    // Check the trader's risk tolerance and return true or false
+    
+    return openTradesOpposite;
+}
